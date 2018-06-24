@@ -1,18 +1,5 @@
-#importning:
+#Tic-Tac-Toe AI created by Tyler BoddySpargo in the CS111 class of Spring 2012, instructed by Josh Davis.
 import random
-# universal variables:
-# list of all positions on the board:
-moves = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
-# list of possible corner moves
-corners = [moves[0], moves[2], moves[6], moves[8]]
-# list of possible corners and center moves
-corncen = [moves[4], moves[0], moves[2], moves[6], moves[8]]
-# list of possible side moves
-sides = [moves[1], moves[3], moves[5], moves[7]]
-
-#######BIG QUESTION: How does one refer to the coordinates of a place on the board.
-#######For example I want to say if the row of two "X"'s is the same (that is, if they are in the same row), perform action z.
-
 
 # Prints the board in a pretty format.
 # Input: Board.
@@ -20,7 +7,6 @@ sides = [moves[1], moves[3], moves[5], moves[7]]
 def printBoard(b):
 	for r in range(3):
 		print "[", b[r][0], b[r][1], b[r][2], "]"
-
 
 
 # Returns the other player.
@@ -31,7 +17,6 @@ def otherPlayer(p):
 		return "X"
 	else:
 		return "O"
-
 
 # Detects whether a given player has won the game.
 # Input: Board. Player "O" or "X".
@@ -51,7 +36,7 @@ def hasWon(board, player):
 
 
 
-# Decides whether a player can win with one move.
+# Decides whether the player can win with one move.
 # Input: board player "O" or "X"
 # Output: Pair of 0, 1, or 2, indicating space in which to move, or None.
 def maywin(board, player):
@@ -80,71 +65,97 @@ def maywin(board, player):
 	else:
 		return None
 
-# Chooses a move at random from amoung all the open spaces on the board.  It attempts 20 possible randoms. It is possible, though imporobable, to generate only occupied spaces.
-# Input: Board.
-# Output: Pair of 0, 1, or 2, indicating space in which to move, or None.
-def ranmove(board):
-	for x in range(20):
-		r = random.randint(0,2)
-		t = random.randint(0,2)
-		if board[r][t] == " ":
-			return [r, t]
-	return None
 
-# Chooses a move at random from amoung the open sides on the board.  It attempts 20 possible randoms. It is possible, though imporobable, to generate only occupied spaces.
-# Input: Board.
-# Output: Pair of 0, 1, or 2, indicating space in which to move, or None.
-def ranside(board):
-	for x in range(20):
-		r = random.choice(sides)
-		if board[r[0]][r[1]] == " ":
-			return r
-	return None
+# Randomely chooses a list of 2 integers from a list.
+# Inputs: List
+# Outputs: Pair of 0, 1, or 2, indicating space in which to move, or None.
+def randmove(List):
+    if len(List) != 0:
+        return List[random.randint(0, len(List) - 1)]
+    else:
+        return None
 
 
+# Creates a list of moves refering to all of the empty corner spaces.
+# Input: board
+# Output: List of pars of 0, 1, or 2, indicating space in which to move, even if it is empty.
+def availcorn(board):
+    L = []
+    if board[0][0] == " ":
+        L = L + [[0, 0]]
+    if board[0][2] == " ":
+        L = L + [[0, 2]]
+    if board[2][0] == " ":
+        L = L + [[2, 0]]
+    if board[2][2] == " ":
+        L = L + [[2, 2]]
+    return L
 
-# Chooses a move at random from amoung the open corners on the board.  It attempts 20 possible randoms. If there is more than one repeat, this means that it is possible not to generate unoccupied corner.
-# Input: Board.
-# Output: Pair of 0, 1, or 2, indicating space in which to move, or None.
-def rancorner(board):
-	for x in range(20):
-		r = random.choice(corners)
-		if board[r[0]][r[1]] == " ":
-			return r
-	return None
+# Creates a list of moves refering to all of the empty spaces on the board.
+# Input: board
+# Output: List of pars of 0, 1, or 2, indicating space in which to move, even if it is empty.
+def avail(board):
+    L = []
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == " ":
+                L = L + [[i, j]]
+    return L
 
+# Creates a list of moves refering to all of the empty corner/center spaces.
+# Input: board
+# Output: List of pars of 0, 1, or 2, indicating space in which to move, even if it is empty.
+def availcorncen(board):
+    L = []
+    if board[0][0] == " ":
+        L = L + [[0, 0]]
+    if board[0][2] == " ":
+        L = L + [[0, 2]]
+    if board[2][0] == " ":
+        L = L + [[2, 0]]
+    if board[2][2] == " ":
+        L = L + [[2, 2]]
+    if board[1][1] == " ":
+        L = L + [[1, 1]]
+    return L
 
-# Chooses a move at random from amoung the open center/corners on the board.  It attempts 20 possible randoms. If there is more than one repeat, this means that it is possible not to generate unoccupied corner.
-# Input: Board.
-# Output: Pair of 0, 1, or 2, indicating space in which to move, or None.
-def rancorncen(board):
-	for x in range(20):
-		r = random.choice(corncen)
-		if board[r[0]][r[1]] == " ":
-			return r
-	return None
+# Creates a list of moves refering to all of the empty side spaces.
+# Input: board
+# Output: List of pars of 0, 1, or 2, indicating space in which to move, even if it is empty.
+def availside(board):
+    L = []
+    if board[0][1] == " ":
+        L = L + [[0, 1]]
+    if board[1][0] == " ":
+        L = L + [[1, 0]]
+    if board[1][2] == " ":
+        L = L + [[1, 2]]
+    if board[2][1] == " ":
+        L = L + [[2, 1]]
+    return L
 
 
 # Selects the next move for the given player.
 # Input: Board. Player "O" or "X" and the number of turns.
 # Output: Pair of 0, 1, or 2, indicating space in which to move, or None.
 def move(board, player, turns):
-	rc = rancorner(board)
-	rs = ranside(board)
-	rcc = rancorncen(board)
+	asd = availside(board)
+	ac = availcorn(board)
+	acc = availcorncen(board)
+	ab = avail(board)
 	op = otherPlayer(player)
-	# list of all corner positions on the board:
+	# list of contents of all corner positions on the board:
 	bcorners = [board[0][0], board[0][2], board[2][0], board[2][2]]
-	# list of all the side positions on the board:
+	# list of contents of all the side positions on the board:
 	bsides = [board[0][1], board[1][0], board[1][2], board[2][1]]
-	# lists of all three collumns on the board:
-	clo = [board[0][0], board[1][0], board[2][0]]
-	clt = [board[0][1], board[1][1], board[2][1]]
-	clth = [board[0][2], board[1][2], board[2][2]]
+	# lists of contents of all positions in the three collumns on the board:
+	clo = [board[0][0], board[1][0], board[2][0]] # left collumn (one)
+	clt = [board[0][1], board[1][1], board[2][1]] # left collumn (two)
+	clth = [board[0][2], board[1][2], board[2][2]] # left collumn (three)
 	#Prints the current player
 	print
 	print player + "'s Turn: "#, turns + 1
-	#Checks the board for a possible winning move and performs it if one exists.
+	#Checks the board for a possible winning move and returns it if one exists.
 	if maywin(board, player) != None:
 		print "Winning play",
 		return maywin(board, player)
@@ -153,19 +164,20 @@ def move(board, player, turns):
 		print "Block",
 		return maywin(board, op)
 	else:
-	#diagrams of moves and qualifications as offensive and defensive assume that X starts and that even number "turns" (X) are offensive and odd number "turns" (O) are defensive.
-		#first move
+	#diagrams of moves and qualificationsas offensive and defensive show below assume that X starts and that even number "turns" (X) are offensive and odd number "turns" (O) are defensive.
+		#first move is played at random
 		if turns == 0:
 			print "Random play",
-			return ranmove(board)
-		#defensive move
+			return randmove(ab)
+		#defensive move - fills middle space if otherPlayer occupies a side
 		elif turns == 1 and board[1][1] == " " and bsides.count(op) == 1:
 			print "Center play",
 			return [1, 1]
+		#defensive move - plays random non-side space
 		elif turns == 1 and board[1][1] == " ":
 			print "Corner/center play",
-			return rcc
-		#offensive move providing these circumstances:
+			return randmove(acc)
+		#offensive move providing these circumstances (and variations on them):
 		#[X, , ]
 		#[ ,O, ]
 		#[ , ,X]
@@ -179,29 +191,52 @@ def move(board, player, turns):
 				return [0, 2]
 			elif board[2][2] == player:
 				return [0, 0]
-		#offensive move
+		# offensive move -providing these circumstances (and variations on them):
+		#[ ,X, ]
+		#[ ,X,O]
+		#[ , , ]
 		elif turns == 2 and board[1][1] == player and bsides.count(op) == 1:
-			return rs
-		#offensive move providing player with center and corner positions.
+			print "Side play"
+			if clt.count(op) == 1:
+				return random.choice([[1, 0], [1, 2]])
+			elif board[1].count(op) == 1:
+				return random.choice([[0, 2], [2, 1]])
+		# offensive move providing player with center and corner positions.
 		elif turns == 2 and board[1][1] == player:
 			print "Corner play",
-			return rc
-		#offensive move occupying center if not already occupied.
+			return randmove(ac)
+		# offensive move occupying center if not already occupied.
 		elif turns >= 2 and board[1][1] == " ":
+			print "Center play",
 			return [1, 1]
-		#defensive move
+		# random defensive move
 		elif turns == 3 and board[0][0] == board[2][2] == op:
 			print "Side play",
-			return rs
-		#defensive move
+			return randmove(asd)
+		# random defensive move
 		elif turns == 3 and board[0][2] == board[2][0] == op:
 			print "Side play",
-			return rs
-		#defensive move
+			return randmove(asd)
+		#defensive move blocking future possible win and providing these circumstances:
+		#[ ,X,O]
+		#[ ,O,X]
+		#[ , , ]
 		elif turns == 3 and board[1][1] == player and bsides.count(op) == 2:
 			print "Side play",
-			return rs
-		#defensive move
+			if clth.count(op) == 1 and board[2].count(op) == 1:
+				return [2, 2]
+			elif clth.count(op) == 1 and board[0].count(op) == 1:
+				return [1, 2]
+			elif clo.count(op) == 1 and board[0].count(op) == 1:
+				return [0, 0]
+			elif clo.count(op) == 1 and board[2].count(op) == 1:
+				return [2, 0]
+			else:
+				return randmove(asd)
+		#defensive move blocking future possible win and providing these circumstances:
+		#[ ,X,O]
+		#[ ,O, ]
+		#[ , ,X]
 		elif turns == 3 and board[1][1] == player and bsides.count(op) == bcorners.count(op) == 1:
 			print "Corner play",
 			if board[0].count(op) == board[1].count(op) == 1:
@@ -224,74 +259,52 @@ def move(board, player, turns):
 					return [0, 2]
 				if board[2][2] == " ":
 					return [2, 2]
-		#offensive move allowing this win:
+		#offensive move providing this win:
 		#[X,X, ]
 		#[O,X, ]
 		#[ , ,O]
-		elif turns == 4 and board[1][1] == player and bsides.count(op) == bcorners.count(op) == 1 and board[1].count(op) != board[1].count(player) and clo.count(op) != clo.count(player):
-			#checks that the two places occupied by otherPlayer are neither in the same row nor in the same collumn. Then places player in the appropriate place to provide win.
-			if board[0].count(op) <= 1 and board[1].count(op) <= 1 and board[2].count(op) <= 1 and clo.count(op) <= 1 and clt.count(op) <= 1 and clth.count(op) <= 1:
-				print "Corner play",
-				if bcorners.index(op) == 0:
-					return [1, 2]
-				elif bcorners.index(op) == 1:
-					return [2, 1]
-				elif bcorners.index(op) == 2:
-					return [0, 1]
-				elif bcorners.index(op) == 3:
-					return [1, 0]
-		#offensive move providing this win:
+		## this long if statement checks to see that: 1) player ocupies the center and one corner space 2) the otherPlayer occupies one side and one corner space on the board 3) the two places occupied by otherPlayer are neither in the same row nor in the same collumn, 4) Then places player in the appropriate place to provide the win.
+		elif turns == 4 and board[1][1] == player and bsides.count(op) == bcorners.count(op) == bcorner.count(player) == 1 and board[0].count(op) <= 1 and board[1].count(op) <= 1 and board[2].count(op) <= 1 and clo.count(op) <= 1 and clt.count(op) <= 1 and clth.count(op) <= 1:
+			print "Side play",
+			if bcorners.index(op) == 0:
+			    return [1, 2]
+			elif bcorners.index(op) == 1:
+			    return [2, 1]
+			elif bcorners.index(op) == 2:
+			    return [0, 1]
+			elif bcorners.index(op) == 3:
+			    return [1, 0]
+		#offensive move providing this win (and it's variations):
 		#[ ,X,X]
 		#[O,X, ]
 		#[ ,O, ]
 		elif turns == 4 and board[1][1] == player and bsides.count(op) == 2 and bsides.count(player) == 1:
 			print "Corner play",
 			if board[0].index(player) == 1:
-				return [0, 2]
+				return random.choice([[0, 0], [0, 2]])
 			if clo.index(player) == 1:
-				return [0, 0]
+				return random.choice([[0, 0], [2, 0]])
 			if clth.index(player) == 1:
-				return [2, 2]
+				return random.choice([[2, 2], [0, 2]])
 			if board[2].index(player) == 1:
-				return [2, 0]
+				return random.choice([[2, 2], [2, 0]])
 		#offensive move allowing this win:
 		#[X, ,X]
 		#[ ,O, ]
 		#[O, ,X]
-		elif turns == 4 and board[0][0] == board[2][2] == player:
+		# This long if statement checks that: 1) player occupies 2 corner spaces that are opposite eachother and 2) otherPlayer occupies one corner space and the middle space.
+		elif turns == 4 and bcorners.count(player) == 2 and bcorners.count(op) == 1 and board[1][1] == op and board[0].count(player) == board[2].count(player) == clo.count(player) == clth.count(player) == 1:
 			print "Corner play",
-			if board[0][2] == " ":
-				return [0, 2]
-			elif board[2][0] == " ":
-				return [2, 0]
-		#offensive move allowing this win:
-		#[X, ,X]
-		#[ ,O, ]
-		#[O, ,X]
-		elif turns == 4 and board[0][2] == board[2][0] == player:
-			print "Corner play",
-			if board[0][0] == " ":
-				return [0, 0]
-			elif board[2][2] == " ":
-				return [2, 2]
-		#offensive move allowing this win:
-		#[X,X, ]
-		#[O,X, ]
-		#[ , ,O]
-		elif turns == 4 and bcorners.count(player) == 1 and board[1][1] == player:
-			print "Side play",
-			if board[2][2] == player or board[0][2] == player and board[1][2] == " ":
-				return [1, 2]
-			if board[2][2] == player or board[2][0] == player and board[2][1] == " ":
-				return [2, 1]
-			if board[2][0] == player or board[0][0] == player and board[1][0] == " ":
-				return [1, 0]
-			if board[0][0] == player or board[0][2] == player and board[1][2] == " ":
-				return [0, 1]
-		#defensive move providing this win:
-		#[ ,X, ]
-		#[O,O,X]
-		#[O,X, ]
+			if board[0][0] == board[2][2] == player:
+				if board[0][2] == " ":
+					return [0, 2]
+				elif board[2][0] == " ":
+					return [2, 0]
+			elif board[0][2] == board[2][0] == player:
+				if board[0][0] == " ":
+					return [0, 0]
+				elif board[2][2] == " ":
+					return [2, 2]
 		elif turns == 5 and board[1][1] == player and bsides.count(op) == 3 and bsides.count(player) == 1:
 			print "Corner play",
 			if bsides.index(player) == 0:
@@ -310,15 +323,15 @@ def move(board, player, turns):
 					return [x, board[x].index(" ")]
 		#any other random move.
 		else:
-			if rc == None:
+			if randmove(ac) == None:
 				print "Side play",
-				return rs
+				return randmove(asd)
 			else:
 				print "Corner play",
-				return rc
+				return randmove(ac)
 
 # prints the winner of the game
-# Inputs: board, player
+# Inputs: board, player, "X" or "O"
 # Outputs: prints Winner, or No winner.
 def printWin(board, player):
 	if hasWon(board, player) == True:
